@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
 
 export default {
@@ -10,7 +11,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        "home-img": "url('/images/home-img.jpg)",
+        "home-img": "url('/images/home-img.jpg')",
       },
       colors: {
         background: "hsl(var(--background))",
