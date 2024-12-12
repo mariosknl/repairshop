@@ -22,8 +22,8 @@ export const customers = pgTable("customers", {
   zip: varchar("zip", { length: 10 }).notNull(),
   notes: text("notes"),
   active: boolean("active").notNull().default(true),
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt")
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
@@ -38,8 +38,8 @@ export const tickets = pgTable("tickets", {
   description: text("description"),
   completed: boolean("completed").notNull().default(false),
   tech: varchar("tech").notNull().default("unassigned"),
-  createdAt: timestamp("createdAt").notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt")
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
     .notNull()
     .defaultNow()
     .$onUpdate(() => new Date()),
