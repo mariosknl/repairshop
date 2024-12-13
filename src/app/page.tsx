@@ -15,7 +15,7 @@ export default function Home() {
             <br />
             Patras, GR 26300
           </address>
-          <p>Open Daily: 9am to 5Pm</p>
+          <p>Open Daily: 9am to 5pm</p>
           <Link href="tel:2610123456" className="underline">
             2610-123456
           </Link>
