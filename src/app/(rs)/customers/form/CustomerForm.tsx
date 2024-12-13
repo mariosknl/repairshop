@@ -6,6 +6,8 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { InputWithLabel } from "@/components/inputs/inputWithLabel";
 import { TextAreaWithLabel } from "@/components/inputs/TextAreaWithLabel";
+import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
+import { StatesArray } from "@/constants/StatesArray";
 
 import {
   insertCustomerSchema,
@@ -74,6 +76,11 @@ export default function CustomerForm({ customer }: Props) {
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="City"
               nameInSchema="city"
+            />
+            <SelectWithLabel<insertCustomerSchemaType>
+              fieldTitle="State"
+              nameInSchema="state"
+              data={StatesArray}
             />
           </div>
 
