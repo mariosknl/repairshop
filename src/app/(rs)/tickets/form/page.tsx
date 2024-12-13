@@ -13,11 +13,10 @@ export async function generateMetadata({
 }) {
   const { customerId, ticketId } = await searchParams;
 
-  if (!customerId && !ticketId) {
+  if (!customerId && !ticketId)
     return {
       title: "Missing Ticket ID or Customer ID",
     };
-  }
 
   if (customerId)
     return {
@@ -28,6 +27,9 @@ export async function generateMetadata({
     return {
       title: `Edit Ticket #${ticketId}`,
     };
+  return {
+    title: "Default",
+  };
 }
 
 export default async function TicketFormPage({
