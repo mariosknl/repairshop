@@ -1,9 +1,5 @@
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Home",
-};
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  return <h2>Home page</h2>;
+  redirect("/tickets");
 }
