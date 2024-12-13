@@ -56,15 +56,17 @@ export default function CustomerForm({ customer }: Props) {
   const {
     execute: executeSave,
     result: saveResult,
-    isExecuting: isSaving,
+    isPending: isSaving,
     reset: resetSaveAction,
   } = useAction(saveCustomerAction, {
     onSuccess({ data }) {
-      toast({
-        variant: "default",
-        title: "Success! 🎉",
-        description: data?.message,
-      });
+      if (data?.message) {
+        toast({
+          variant: "default",
+          title: "Success! 🎉",
+          description: data.message,
+        });
+      }
     },
     onError() {
       toast({
@@ -77,7 +79,7 @@ export default function CustomerForm({ customer }: Props) {
 
   async function submitForm(data: insertCustomerSchemaType) {
     // console.log(data);
-    executeSave(data);
+    executeSave({ ...data, firstName: "", phone: "" });
   }
 
   return (
