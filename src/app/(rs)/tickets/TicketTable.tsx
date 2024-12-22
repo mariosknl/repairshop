@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
 } from "@tanstack/react-table";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { usePolling } from "@/hooks/usePolling";
 import {
   CircleCheckIcon,
@@ -164,6 +164,18 @@ export const TicketTable = ({ data }: Props) => {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  useEffect(() => {
+    const currentPageIndex = table.getState().pagination.pageIndex;
+    const pageCount = table.getPageCount();
+
+    if (pageCount <= currentPageIndex && currentPageIndex > 0) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", "1");
+      router.replace(`?${params.toString()}`, { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table.getState().columnFilters]);
+
   return (
     <div className="mt-6 flex flex-col gap-4">
       <div className="rounded-lg overflow-hidden border border-border">
@@ -223,9 +235,10 @@ export const TicketTable = ({ data }: Props) => {
       <div className="flex justify-between items-center gap-1 flex-wrap">
         <div>
           <p className="whitespace-nowrap font-bold">
-            {`Page ${
-              table.getState().pagination.pageIndex + 1
-            } of ${table.getPageCount()}`}
+            {`Page ${table.getState().pagination.pageIndex + 1} of ${Math.max(
+              1,
+              table.getPageCount()
+            )}`}
             &nbsp;&nbsp;
             {`[${table.getFilteredRowModel().rows.length} ${
               table.getFilteredRowModel().rows.length !== 1
