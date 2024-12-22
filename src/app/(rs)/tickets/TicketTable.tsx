@@ -14,7 +14,7 @@ import {
   getFacetedUniqueValues,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import {
   CircleCheckIcon,
@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import Filter from "@/components/react-table/Filter";
+import { usePolling } from "@/hooks/usePolling";
 
 type Props = {
   data: TicketSearchResultsType;
@@ -43,6 +44,7 @@ type RowType = TicketSearchResultsType[0];
 
 export const TicketTable = ({ data }: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([
     {
@@ -50,6 +52,8 @@ export const TicketTable = ({ data }: Props) => {
       desc: false,
     },
   ]);
+
+  usePolling(searchParams.get("searchText"), 5000);
 
   const columnHeadersArray: Array<keyof RowType> = [
     "ticketDate",
