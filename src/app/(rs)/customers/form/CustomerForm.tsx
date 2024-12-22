@@ -1,28 +1,31 @@
 "use client";
 
-import { InputWithLabel } from "@/components/inputs/inputWithLabel";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+
 import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
 import { TextAreaWithLabel } from "@/components/inputs/TextAreaWithLabel";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { StatesArray } from "@/constants/StatesArray";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-
 import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
+
+import { StatesArray } from "@/constants/StatesArray";
+
 import {
   insertCustomerSchema,
   type insertCustomerSchemaType,
   type selectCustomerSchemaType,
 } from "@/zod-schemas/customer";
 
+import { useAction } from "next-safe-action/hooks";
 import { saveCustomerAction } from "@/app/actions/saveCustomerAction";
-import { DisplayServerActionResponse } from "@/components/DisplayServerActionResponse";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
-import { useAction } from "next-safe-action/hooks";
+import { DisplayServerActionResponse } from "@/components/DisplayServerActionResponse";
+
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { InputWithLabel } from "@/components/inputs/inputWithLabel";
 
 type Props = {
   customer?: selectCustomerSchemaType;
@@ -36,6 +39,7 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
   const hasCustomerId = searchParams.has("customerId");
 
   const emptyValues: insertCustomerSchemaType = {
+    id: 0,
     firstName: "",
     lastName: "",
     address1: "",
@@ -74,8 +78,7 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
 
   useEffect(() => {
     form.reset(hasCustomerId ? defaultValues : emptyValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.get("customerId")]);
+  }, [searchParams.get("customerId")]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     execute: executeSave,
@@ -102,8 +105,7 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
   });
 
   async function submitForm(data: insertCustomerSchemaType) {
-    // console.log(data);
-    executeSave({ ...data, firstName: "", phone: "" });
+    executeSave(data);
   }
 
   return (
@@ -125,22 +127,27 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
               fieldTitle="First Name"
               nameInSchema="firstName"
             />
+
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="Last Name"
               nameInSchema="lastName"
             />
+
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="Address 1"
               nameInSchema="address1"
             />
+
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="Address 2"
               nameInSchema="address2"
             />
+
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="City"
               nameInSchema="city"
             />
+
             <SelectWithLabel<insertCustomerSchemaType>
               fieldTitle="State"
               nameInSchema="state"
@@ -153,10 +160,12 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
               fieldTitle="Zip Code"
               nameInSchema="zip"
             />
+
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="Email"
               nameInSchema="email"
             />
+
             <InputWithLabel<insertCustomerSchemaType>
               fieldTitle="Phone"
               nameInSchema="phone"
@@ -192,11 +201,11 @@ export default function CustomerForm({ customer, isManager = false }: Props) {
                   "Save"
                 )}
               </Button>
+
               <Button
                 type="button"
                 variant="destructive"
                 title="Reset"
-                aria-label="reset"
                 onClick={() => {
                   form.reset(defaultValues);
                   resetSaveAction();
