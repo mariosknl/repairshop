@@ -8,6 +8,8 @@ import { Form } from "@/components/ui/form";
 import { StatesArray } from "@/constants/StatesArray";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 import {
@@ -30,26 +32,50 @@ type Props = {
 export default function CustomerForm({ customer, isManager = false }: Props) {
   const { toast } = useToast();
 
-  const defaultValues: insertCustomerSchemaType = {
-    id: customer?.id ?? 0,
-    firstName: customer?.firstName ?? "",
-    lastName: customer?.lastName ?? "",
-    address1: customer?.address1 ?? "",
-    address2: customer?.address2 ?? "",
-    city: customer?.city ?? "",
-    state: customer?.state ?? "",
-    zip: customer?.zip ?? "",
-    phone: customer?.phone ?? "",
-    email: customer?.email ?? "",
-    notes: customer?.notes ?? "",
-    active: customer?.active ?? true,
+  const searchParams = useSearchParams();
+  const hasCustomerId = searchParams.has("customerId");
+
+  const emptyValues: insertCustomerSchemaType = {
+    firstName: "",
+    lastName: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    zip: "",
+    phone: "",
+    email: "",
+    notes: "",
+    active: true,
   };
+
+  const defaultValues: insertCustomerSchemaType = hasCustomerId
+    ? {
+        id: customer?.id ?? 0,
+        firstName: customer?.firstName ?? "",
+        lastName: customer?.lastName ?? "",
+        address1: customer?.address1 ?? "",
+        address2: customer?.address2 ?? "",
+        city: customer?.city ?? "",
+        state: customer?.state ?? "",
+        zip: customer?.zip ?? "",
+        phone: customer?.phone ?? "",
+        email: customer?.email ?? "",
+        notes: customer?.notes ?? "",
+        active: customer?.active ?? true,
+      }
+    : emptyValues;
 
   const form = useForm<insertCustomerSchemaType>({
     mode: "onBlur",
     resolver: zodResolver(insertCustomerSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    form.reset(hasCustomerId ? defaultValues : emptyValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.get("customerId")]);
 
   const {
     execute: executeSave,
