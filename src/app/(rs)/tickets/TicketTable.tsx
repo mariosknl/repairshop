@@ -187,7 +187,12 @@ export const TicketTable = ({ data }: Props) => {
                     </div>
                     {header.column.getCanFilter() ? (
                       <div className="grid place-content-center">
-                        <Filter column={header.column} />
+                        <Filter
+                          column={header.column}
+                          filteredRows={table
+                            .getFilteredRowModel()
+                            .rows.map((row) => row.getValue(header.column.id))}
+                        />
                       </div>
                     ) : null}
                   </TableHead>
