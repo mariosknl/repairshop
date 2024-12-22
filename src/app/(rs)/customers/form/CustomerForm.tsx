@@ -1,35 +1,33 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { InputWithLabel } from "@/components/inputs/inputWithLabel";
-import { TextAreaWithLabel } from "@/components/inputs/TextAreaWithLabel";
 import { SelectWithLabel } from "@/components/inputs/SelectWithLabel";
+import { TextAreaWithLabel } from "@/components/inputs/TextAreaWithLabel";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
 import { StatesArray } from "@/constants/StatesArray";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
+import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 import {
   insertCustomerSchema,
   type insertCustomerSchemaType,
   type selectCustomerSchemaType,
 } from "@/zod-schemas/customer";
-import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel";
 
-import { useAction } from "next-safe-action/hooks";
 import { saveCustomerAction } from "@/app/actions/saveCustomerAction";
+import { DisplayServerActionResponse } from "@/components/DisplayServerActionResponse";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderCircle } from "lucide-react";
-import { DisplayServerActionResponse } from "@/components/DisplayServerActionResponse";
+import { useAction } from "next-safe-action/hooks";
 
 type Props = {
   customer?: selectCustomerSchemaType;
+  isManager?: boolean | undefined;
 };
 
-export default function CustomerForm({ customer }: Props) {
-  const { getPermission, isLoading } = useKindeBrowserClient();
-  const isManager = !isLoading && getPermission("manager")?.isGranted;
+export default function CustomerForm({ customer, isManager = false }: Props) {
   const { toast } = useToast();
 
   const defaultValues: insertCustomerSchemaType = {
@@ -144,9 +142,7 @@ export default function CustomerForm({ customer }: Props) {
               className="h-40"
             />
 
-            {isLoading ? (
-              <p>Loading...</p>
-            ) : isManager && customer?.id ? (
+            {isManager && customer?.id ? (
               <CheckboxWithLabel<insertCustomerSchemaType>
                 fieldTitle="Active"
                 nameInSchema="active"
