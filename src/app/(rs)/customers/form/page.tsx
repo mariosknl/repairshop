@@ -45,10 +45,16 @@ export default async function CustomerFormPage({
         );
       }
       // put customer form component
-      return <CustomerForm customer={customer} isManager={isManager} />;
+      return (
+        <CustomerForm
+          key={customerId}
+          customer={customer}
+          isManager={isManager}
+        />
+      );
     } else {
       // new customer form component
-      return <CustomerForm isManager={isManager} />;
+      return <CustomerForm key="new" isManager={isManager} />;
     }
   } catch (error) {
     if (error instanceof Error) {
