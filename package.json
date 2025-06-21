@@ -11,7 +11,7 @@
     "db:migrate": "tsx ./src/db/migrate.ts"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.9.1",
+    "@hookform/resolvers": "^5.0.0",
     "@kinde-oss/kinde-auth-nextjs": "^2.4.6",
     "@kinde/management-api-js": "^0.14.0",
     "@neondatabase/serverless": "^1.0.0",
